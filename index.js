@@ -4,40 +4,66 @@
 // put your solution in this method
 function solution(toPrint, toRead) {
 
-    const input = readline().split(' ');
-    const dice1 = parseInt(input[0]);
-    const dice2 = parseInt(input[1]);
+    let testCase = undefined;
+    let testCaseNo = 0;
+    let answerFound = false;
 
-    log(`Parsed input dice 1: ${dice1} dice 2: ${dice2}`);
+    while (testCase = readline()) {
 
-    const results = {};
-    let maxProb = 0;
+        testCaseNo++;
+        answerFound = false;
+        const input = testCase.split(' ');
+        const x = parseFloat(input[0]);
+        const y = parseFloat(input[1]);
+        const r = parseInt(input[2]);
 
-    for (let i = 1; i <= dice1; i++)
-        for (let j = 1; j <= dice2; j++) {
-            const prob = (1 / dice1) + (1 / dice2);
-            const sum = i + j;
+        log(`Parsed input x: ${x} y: ${y} r:${r}`);
 
-            results[sum] = (results[sum] || 0) + prob;
+        let z = new imaginary(0, 0);
+        const c = new imaginary(x, y);
+
+        if(c === 0) {
+          print(`Case ${testCaseNo}: IN`);
+          break;
         }
 
-    let sums = [];
+        for (let i = 0; i < r; i++) {
+            // z_(n+1) = z_n^2 + c
+            z = z.pow().add(c);
 
-    Object.keys(results).forEach((o) => sums.push({
-        prob: results[o],
-        sum: o
-    }));
+            if (z.mod() > 2) {
+                print(`Case ${testCaseNo}: OUT`);
+                answerFound = true;
+                break;
+            }
+        }
 
-    sums = sums.sort((a, b) => b.prob - a.prob);
-    const max = sums[0].prob;
-
-    //log(sums);
-
-    sums
-        .filter(s => s.prob == max)
-        .sort((a, b) => a.sum - b.sum)
-        .forEach(s => print(s.sum));
+        if (!answerFound) {
+            print(`Case ${testCaseNo}: IN`);
+        }
+    }
 }
+
+class imaginary {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    add(a) {
+        return new imaginary(this.x + a.x, this.y + a.y);
+    }
+
+    pow() {
+        return new imaginary(this.x * this.x - this.y * this.y, 2 * this.x * this.y);
+    }
+
+    mod() {
+        return Math.sqrt(this.x * this.x + this.y * this.y);
+    }
+}
+
+
 
 // run solution without any params for kattis
 if (typeof process === 'undefined' || process.release.name !== 'node') {
@@ -94,9 +120,9 @@ if (typeof process !== 'undefined' && process.argv[2] && process.argv[2] !== 'i'
     solution();
 }
 
-function log(){
+function log() {
 
-    if(typeof process !== 'undefined' && process.release.name === 'node') {
+    if (typeof process !== 'undefined' && process.release.name === 'node') {
         console.log.call(this, ...arguments);
     }
 }

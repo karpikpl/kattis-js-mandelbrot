@@ -11,7 +11,7 @@ function testSolution(input) {
     Index.init((ans) => result.push(ans), () => input.shift());
     Index.solution();
 
-    return result.length == 1 && result[0] || result;
+    return result;
 }
 
 describe('Solution', function() {
@@ -19,25 +19,26 @@ describe('Solution', function() {
     describe('program', function() {
 
         [{
-            input: ['6 6'],
-            result: 7
-        }, {
-            input: ['6 4'],
-            result: ['5', '6', '7']
-        }, {
-            input: ['12 20'],
-            result: [
-                '13',
-                '14',
-                '15',
-                '16',
-                '17',
-                '18',
-                '19',
-                '20',
-                '21'
-            ]
-        }].forEach((testCase) => {
+                input: ['0 0 100',
+                    '1.264 -1.109 100',
+                    '1.264 -1.109 10',
+                    '1.264 -1.109 1',
+                    '-2.914 -1.783 200',
+                    '0.124 0.369 200'
+                ],
+                result: ['Case 1: IN',
+                    'Case 2: OUT',
+                    'Case 3: OUT',
+                    'Case 4: IN',
+                    'Case 5: OUT',
+                    'Case 6: IN'
+                ]
+            },
+            {
+                input: ['1000 -987 0'],
+                result: ['Case 1: IN']
+            }
+        ].forEach((testCase) => {
 
             it('should solve for ' + testCase.input, function() {
 
